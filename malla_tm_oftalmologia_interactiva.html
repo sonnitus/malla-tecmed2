@@ -1,0 +1,198 @@
+
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;700&display=swap" rel="stylesheet">
+
+    <meta charset="UTF-8">
+    <title>Malla Tecnología Médica - Oftalmología UV (con prerrequisitos)</title>
+    <style>
+        body {
+        transition: background 0.3s;
+    
+            font-family: 'Nunito', sans-serif;
+            background: #f4f4f4;
+            margin: 0;
+            padding: 20px;
+        }
+        h1 {
+            text-align: center;
+            color: #004f9e;
+        }
+        .semester:hover {
+        transform: translateY(-5px);
+    }
+    .semester {
+            background: white;
+            border-radius: 12px;
+            padding: 15px;
+            margin: 10px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1); transition: transform 0.3s;
+        }
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 15px;
+        }
+        h2 {
+            color: #006bb3;
+        }
+        ul {
+            padding-left: 20px;
+        }
+        input[type="checkbox"]:disabled + label {
+            color: #aaa;
+        }
+    
+        input[type="checkbox"]:checked + label {
+            text-decoration: line-through;
+            color: #888;
+        }
+        label {
+            cursor: pointer;
+            transition: color 0.3s;
+        }
+        input[type="checkbox"] {
+            transform: scale(1.2);
+        }
+    </style>
+</head>
+<body>
+    <h1>Malla Tecnología Médica - Mención Oftalmología UV</h1>
+    <div class="grid" id="malla"></div>
+
+    <script>
+        const ramos = [
+            // Semestre 1
+            { id: "s1_r1", nombre: "Anatomía General y del Sistema Locomotor", prereq: [] },
+            { id: "s1_r2", nombre: "Biología Celular y Molecular", prereq: [] },
+            { id: "s1_r3", nombre: "Química General y Orgánica", prereq: [] },
+            { id: "s1_r4", nombre: "Matemática Aplicada", prereq: [] },
+            { id: "s1_r5", nombre: "Histología General", prereq: [] },
+            { id: "s1_r6", nombre: "Autorregulación", prereq: [] },
+
+            // Semestre 2
+            { id: "s2_r1", nombre: "Anatomía del Sistema Nervioso y Especial", prereq: ["s1_r1"] },
+            { id: "s2_r2", nombre: "Fisiología", prereq: ["s1_r1"] },
+            { id: "s2_r3", nombre: "Bioquímica", prereq: ["s1_r3"] },
+            { id: "s2_r4", nombre: "Física General", prereq: ["s1_r4"] },
+            { id: "s2_r5", nombre: "Lengua Materna", prereq: [] },
+            { id: "s2_r6", nombre: "Inglés I", prereq: [] },
+
+            // Semestre 3
+            { id: "s3_r1", nombre: "Fisiopatología General", prereq: ["s2_r2"] },
+            { id: "s3_r2", nombre: "Microbiología", prereq: ["s1_r2"] },
+            { id: "s3_r3", nombre: "Fundamentos de Farmacología", prereq: ["s2_r3"] },
+            { id: "s3_r4", nombre: "Psicología Aplicada", prereq: [] },
+            { id: "s3_r5", nombre: "Física Integrada", prereq: ["s2_r4"] },
+            { id: "s3_r6", nombre: "Inglés II", prereq: ["s2_r6"] },
+
+            // Semestre 4
+            { id: "s4_r1", nombre: "Fisiopatología de Sistemas", prereq: ["s3_r1"] },
+            { id: "s4_r2", nombre: "Bioestadística", prereq: [] },
+            { id: "s4_r3", nombre: "Salud Pública", prereq: [] },
+            { id: "s4_r4", nombre: "Gestión y Liderazgo en Salud", prereq: [] },
+            { id: "s4_r5", nombre: "Bioética y Legislación General", prereq: [] },
+            { id: "s4_r6", nombre: "Ciencias Generales de Enfermería", prereq: [] },
+
+            // Semestre 5 - Oftalmología
+            { id: "s5_r1", nombre: "Morfofisiología del Sistema Ocular", prereq: ["s2_r2"] },
+            { id: "s5_r2", nombre: "Exploración del Sistema Visual", prereq: ["s5_r1"] },
+            { id: "s5_r3", nombre: "Atención Primaria en Oftalmología", prereq: ["s5_r1"] },
+            { id: "s5_r4", nombre: "Introducción al Estrabismo", prereq: ["s5_r1"] },
+            { id: "s5_r5", nombre: "Tipe I", prereq: [] },
+
+            // Semestre 6
+            { id: "s6_r1", nombre: "Fisiopatología Ocular", prereq: ["s5_r1"] },
+            { id: "s6_r2", nombre: "Glaucoma", prereq: ["s5_r1"] },
+            { id: "s6_r3", nombre: "Técnicas de Estudio Campimétrico", prereq: ["s5_r2"] },
+            { id: "s6_r4", nombre: "Estrabismo y Técnicas Aplicadas", prereq: ["s5_r4"] },
+            { id: "s6_r5", nombre: "Tipe II", prereq: ["s5_r5"] },
+
+            // Semestre 7
+            { id: "s7_r1", nombre: "Imagenología Ocular del Polo Posterior", prereq: ["s6_r1"] },
+            { id: "s7_r2", nombre: "Neuro-oftalmología", prereq: ["s6_r1"] },
+            { id: "s7_r3", nombre: "Lentes de Contacto", prereq: ["s5_r2"] },
+            { id: "s7_r4", nombre: "Tipe III", prereq: ["s6_r5"] },
+
+            // Semestre 8
+            { id: "s8_r1", nombre: "Imagenología Ocular del Polo Anterior y Técnicas Especiales", prereq: ["s7_r1"] },
+            { id: "s8_r2", nombre: "Optometría Avanzada", prereq: ["s7_r3"] },
+            { id: "s8_r3", nombre: "Taller de Terapia Visual Baja Visión", prereq: ["s6_r4"] },
+            { id: "s8_r4", nombre: "Seminario de Investigación", prereq: ["s6_r5"] },
+
+            // Semestre 9
+            { id: "s9_r1", nombre: "Práctica Profesional", prereq: ["s8_r1", "s8_r2", "s8_r3"] },
+
+            // Semestre 10
+            { id: "s10_r1", nombre: "Seminario de Título", prereq: ["s9_r1"] },
+        ];
+
+        const malla = document.getElementById("malla");
+
+        function createCheckbox(ramo) {
+            const saved = JSON.parse(localStorage.getItem("aprobados") || "[]");
+            const checked = saved.includes(ramo.id);
+            const disabled = ramo.prereq.some(p => !saved.includes(p));
+            const li = document.createElement("li");
+            const input = document.createElement("input");
+            const label = document.createElement("label");
+            input.type = "checkbox";
+            input.id = ramo.id;
+            input.disabled = disabled;
+            input.checked = checked;
+            input.addEventListener("change", () => {
+                let updated = new Set(JSON.parse(localStorage.getItem("aprobados") || "[]"));
+                if (input.checked) updated.add(ramo.id);
+                else updated.delete(ramo.id);
+                localStorage.setItem("aprobados", JSON.stringify([...updated]));
+                
+        // Desbloquear ramos dependientes
+        document.querySelectorAll('input[type="checkbox"]').forEach(cb => {
+            const ramo = ramos.find(r => r.id === cb.id);
+            if (!ramo) return;
+            const dependientes = ramos.filter(r => r.prereq.includes(ramo.id));
+            dependientes.forEach(dep => {
+                const depCheckbox = document.getElementById(dep.id);
+                if (depCheckbox) {
+                    const ready = dep.prereq.every(p => updated.has(p));
+                    depCheckbox.disabled = !ready;
+                }
+            });
+        });
+    
+            });
+            label.htmlFor = ramo.id;
+            label.textContent = ramo.nombre;
+            li.appendChild(input);
+            li.appendChild(label);
+            return li;
+        }
+
+        function render() {
+            let semestres = {};
+            ramos.forEach(r => {
+                const s = r.id.split("_")[0];
+                if (!semestres[s]) semestres[s] = [];
+                semestres[s].push(r);
+            });
+
+            for (const s in semestres) {
+                const card = document.createElement("div");
+                card.className = "semester";
+                const title = document.createElement("h2");
+                title.textContent = "Semestre " + s.slice(1);
+                card.appendChild(title);
+                const ul = document.createElement("ul");
+                semestres[s].forEach(r => ul.appendChild(createCheckbox(r)));
+                card.appendChild(ul);
+                malla.appendChild(card);
+            }
+        }
+
+        render();
+    </script>
+</body>
+</html>
