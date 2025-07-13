@@ -1,0 +1,179 @@
+
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Malla Tecnología Médica - UV</title>
+  <style>
+    body {
+      margin: 0;
+      padding: 0;
+      font-family: 'Segoe UI', sans-serif;
+      background-color: #f2f2f2;
+      color: #2c2c2c;
+    }
+    header {
+      background-color: #5a1a1a;
+      color: white;
+      padding: 20px;
+      text-align: center;
+    }
+    header h1 {
+      margin: 0;
+    }
+    .container {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: 20px;
+      padding: 20px;
+    }
+    .semestre {
+      background-color: white;
+      border-left: 8px solid #7b2d2d;
+      border-radius: 10px;
+      box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+      padding: 15px 20px;
+    }
+    .semestre h2 {
+      margin-top: 0;
+      font-size: 18px;
+      color: #7b2d2d;
+    }
+    label {
+      display: block;
+      margin-bottom: 8px;
+      font-size: 15px;
+      cursor: pointer;
+    }
+    input[type="checkbox"] {
+      margin-right: 10px;
+      transform: scale(1.1);
+      accent-color: #7b2d2d;
+    }
+    .completado {
+      text-decoration: line-through;
+      color: #7b2d2d;
+      font-weight: bold;
+    }
+    footer {
+      text-align: center;
+      padding: 15px;
+      font-size: 14px;
+      color: #666;
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>Malla Tecnología Médica - Universidad de Valparaíso</h1>
+  </header>
+  <main class="container" id="malla"></main>
+  <footer>Tu progreso se guarda automáticamente en el navegador.</footer>
+
+  <script>
+    const mallaUV = {
+      "Semestre 1": [
+        "Anatomía general y del sistema locomotor",
+        "Biología celular y molecular",
+        "Química general y orgánica",
+        "Matemática aplicada",
+        "Histología general",
+        "Autorregulación"
+      ],
+      "Semestre 2": [
+        "Anatomía del sistema nervioso y esplacnología",
+        "Fisiología",
+        "Bioquímica",
+        "Física general",
+        "Lengua materna",
+        "Inglés I"
+      ],
+      "Semestre 3": [
+        "Fisiopatología general",
+        "Microbiología",
+        "Fundamentos de farmacología",
+        "Psicología aplicada",
+        "Física integrada",
+        "Inglés II"
+      ],
+      "Semestre 4": [
+        "Fisiopatología del sistema",
+        "Bioestadística",
+        "Salud pública",
+        "Gestión y liderazgo en salud",
+        "Bioética y legislación general",
+        "Enfermería básica"
+      ],
+      "Semestre 5": [
+        "Técnicas radiológicas I",
+        "Electromagnetismo",
+        "Protección radiológica y dosimetría",
+        "Anatomía radiológica",
+        "TPE I"
+      ],
+      "Semestre 6": [
+        "Técnicas radiológicas II",
+        "Física aplicada I",
+        "Esplacnoradiología",
+        "Fundamentos de la metodología de la investigación",
+        "TPE II"
+      ],
+      "Semestre 7": [
+        "Tomografía computarizada de rutina",
+        "Resonancia magnética",
+        "Angiografía y hemodinamia",
+        "Física nuclear aplicada",
+        "Metodología de la investigación aplicada",
+        "TPE III"
+      ],
+      "Semestre 8": [
+        "Medicina nuclear",
+        "Radioterapia",
+        "Ecotomografía",
+        "Imagenología compleja",
+        "Seminario de investigación"
+      ],
+      "Semestre 9": [
+        "Práctica profesional"
+      ],
+      "Semestre 10": [
+        "Seminario de título"
+      ]
+    };
+
+    const container = document.getElementById("malla");
+
+    Object.entries(mallaUV).forEach(([semestre, ramos]) => {
+      const card = document.createElement("div");
+      card.className = "semestre";
+
+      const title = document.createElement("h2");
+      title.textContent = semestre;
+      card.appendChild(title);
+
+      ramos.forEach((ramo, i) => {
+        const id = semestre + "_" + i;
+        const label = document.createElement("label");
+        const checkbox = document.createElement("input");
+        checkbox.type = "checkbox";
+        checkbox.id = id;
+        checkbox.checked = localStorage.getItem(id) === "true";
+
+        if (checkbox.checked) label.classList.add("completado");
+
+        checkbox.addEventListener("change", () => {
+          localStorage.setItem(id, checkbox.checked);
+          label.classList.toggle("completado", checkbox.checked);
+        });
+
+        label.appendChild(checkbox);
+        label.appendChild(document.createTextNode(ramo));
+        card.appendChild(label);
+      });
+
+      container.appendChild(card);
+    });
+  </script>
+</body>
+</html>
